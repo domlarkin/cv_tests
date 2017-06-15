@@ -1,8 +1,8 @@
 LDFLAGS = -I/usr/include/opencv -lopencv_cudabgsegm -lopencv_cudaobjdetect -lopencv_cudastereo -lopencv_shape -lopencv_stitching -lopencv_cudafeatures2d -lopencv_superres -lopencv_cudacodec -lopencv_videostab -lopencv_cudaoptflow -lopencv_cudalegacy -lopencv_calib3d -lopencv_features2d -lopencv_objdetect -lopencv_highgui -lopencv_videoio -lopencv_photo -lopencv_imgcodecs -lopencv_cudawarping -lopencv_cudaimgproc -lopencv_cudafilters -lopencv_video -lopencv_ml -lopencv_imgproc -lopencv_flann -lopencv_cudaarithm -lopencv_core -lopencv_cudev
 
 
-build: shortSampleCpu_v2 shortSampleCpu_v3 shortSampleGpu_v3 ThreshSliders_v3
-
+#build: shortSampleCpu_v2 shortSampleCpu_v3 shortSampleGpu_v3 ThreshSliders_v3 ThreshSliders_g3
+build: ThreshSliders_v3 ThreshSliders_g3
 #######################     CPU       ############################
 shortSampleCpu_v2.o: shortSampleCpu_v2.cpp
 	g++ -std=c++11 -c shortSampleCpu_v2.cpp -o shortSampleCpu_v2.o
@@ -40,6 +40,12 @@ shortSampleGpu_v3.o: shortSampleGpu_v3.cu
 
 shortSampleGpu_v3: shortSampleGpu_v3.o
 	nvcc -ccbin g++ $(CUDAFLAGS) shortSampleGpu_v3.o -o shortSampleGpu_v3 $(LIBDIRS) $(LIBS) $(LDFLAGS)
+
+ThreshSliders_g3.o: ThreshSliders_g3.cu
+	nvcc -ccbin g++ $(CUDAFLAGS) $(INCDIRS) -c ThreshSliders_g3.cu -o ThreshSliders_g3.o
+
+ThreshSliders_g3: ThreshSliders_g3.o
+	nvcc -ccbin g++ $(CUDAFLAGS) ThreshSliders_g3.o -o ThreshSliders_g3 $(LIBDIRS) $(LIBS) $(LDFLAGS)
 
 ########################    CLEAN   ################################
 clean:
