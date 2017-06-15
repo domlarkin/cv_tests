@@ -52,7 +52,9 @@ int main( int, char** argv )
         std::cout<<"cannot read video!\n";
         return -1;
     }
-    if (isLogging) log2file("top,aftblur,aftgray,aftthresh,afterode,aftcanny,afthough\n");
+    std::ostringstream colHeaders;
+    colHeaders << "top,aftblur,aftgray,aftthresh,afterode,aftcanny,afthough,aftdrawing,"<<CLOCKS_PER_SEC<<"\n" ;
+    if (isLogging) log2file(colHeaders.str());
     while(true)
     {
         if(!capture.read(src)){
@@ -110,14 +112,15 @@ void Threshold_Demo( int, void* )
     
     // Find the Hough lines
     cv::HoughLinesP(src_canny, lines, h_rho, (CV_PI / h_theta), h_thresh, h_minLineLen, h_maxLineGap);
-    Mat hough_image = cv::Mat::zeros(src_canny.size(), src_canny.type());
+    if (isLogging) outStream << clock() << ","; // TIMER: afthough
+    //Mat hough_image = cv::Mat::zeros(src_canny.size(), src_canny.type());
         // Draw the Hough lines on the image
     for (int i = 0; i < lines.size(); i++) {
-        line(hough_image, cv::Point(lines[i][0], lines[i][1]),
-            cv::Point(lines[i][2], lines[i][3]), cv::Scalar(255, 255, 255), 3, 8);
+        line(src, cv::Point(lines[i][0], lines[i][1]),
+            cv::Point(lines[i][2], lines[i][3]), cv::Scalar(0, 0, 255), 3, 8);
     }
-    if (isLogging) outStream << clock() << "\n"; // TIMER: afthough
+    if (isLogging) outStream << clock() << "\n"; // TIMER: aftdrawing
     if (isLogging) log2file(outStream.str());
     //imshow("HoughLines", src);
-    imshow( window_name, hough_image );
+    imshow( window_name, src );
 }

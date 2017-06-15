@@ -5,25 +5,25 @@ LDFLAGS = -I/usr/include/opencv -lopencv_cudabgsegm -lopencv_cudaobjdetect -lope
 build: ThreshSliders_v3 ThreshSliders_g3
 #######################     CPU       ############################
 shortSampleCpu_v2.o: shortSampleCpu_v2.cpp
-	g++ -std=c++11 -c shortSampleCpu_v2.cpp -o shortSampleCpu_v2.o
+	g++ -std=c++11 -O3 -c shortSampleCpu_v2.cpp -o shortSampleCpu_v2.o
 
 shortSampleCpu_v2: shortSampleCpu_v2.o
-	g++ -std=c++11 shortSampleCpu_v2.o -o shortSampleCpu_v2 $(LDFLAGS)
+	g++ -std=c++11 -O3 shortSampleCpu_v2.o -o shortSampleCpu_v2 $(LDFLAGS)
 
 shortSampleCpu_v3.o: shortSampleCpu_v3.cpp
-	g++ -std=c++11 -c shortSampleCpu_v3.cpp -o shortSampleCpu_v3.o
+	g++ -std=c++11 -c -O3 shortSampleCpu_v3.cpp -o shortSampleCpu_v3.o
 
 shortSampleCpu_v3: shortSampleCpu_v3.o
-	g++ -std=c++11 shortSampleCpu_v3.o -o shortSampleCpu_v3 $(LDFLAGS)
+	g++ -std=c++11 -O3 shortSampleCpu_v3.o -o shortSampleCpu_v3 $(LDFLAGS)
 
 ThreshSliders_v3.o: ThreshSliders_v3.cpp
-	g++ -std=c++11 -c ThreshSliders_v3.cpp -o ThreshSliders_v3.o
+	g++ -std=c++11 -c -O3 ThreshSliders_v3.cpp -o ThreshSliders_v3.o
 
 ThreshSliders_v3: ThreshSliders_v3.o
-	g++ -std=c++11 ThreshSliders_v3.o -o ThreshSliders_v3 $(LDFLAGS)
+	g++ -std=c++11 -O3 ThreshSliders_v3.o -o ThreshSliders_v3 $(LDFLAGS)
 
 #######################     CUDA       ############################
-CUDAFLAGS= -std=c++11 -m64 -gencode arch=compute_62,code=compute_62
+CUDAFLAGS= --compiler-options "-O3" -std=c++11 -m64 -gencode arch=compute_62,code=compute_62
 LIBS= -lpthread -lcudart -lcublas
 LIBDIRS=-L/usr/local/cuda-8.0/lib64
 INCDIRS=-I/usr/local/cuda-8.0/include
@@ -59,4 +59,6 @@ clean:
 	-rm -f shortSampleGpu_v3
 	-rm -f ThreshSliders_v3.o
 	-rm -f ThreshSliders_v3
+	-rm -f ThreshSliders_g3.o
+	-rm -f ThreshSliders_g3
 	
